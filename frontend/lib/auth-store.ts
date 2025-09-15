@@ -1,22 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-}
-
-interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  login: (user: User, token: string) => void;
-  logout: () => void;
-  updateUser: (userData: Partial<User>) => void;
-  initialize: () => void;
-}
+import { STORAGE_KEYS } from './config';
+import type { User, AuthState } from './types';
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -27,14 +12,14 @@ export const useAuthStore = create<AuthState>()(
 
       login: (user: User, token: string) => {
         set({ user, token, isAuthenticated: true });
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
+        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
       },
 
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
+        localStorage.removeItem(STORAGE_KEYS.TOKEN);
+        localStorage.removeItem(STORAGE_KEYS.USER);
       },
 
       updateUser: (userData: Partial<User>) => {
@@ -42,13 +27,13 @@ export const useAuthStore = create<AuthState>()(
         if (currentUser) {
           const updatedUser = { ...currentUser, ...userData };
           set({ user: updatedUser });
-          localStorage.setItem('user', JSON.stringify(updatedUser));
+          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
         }
       },
 
       initialize: () => {
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
+        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
+        const userStr = localStorage.getItem(STORAGE_KEYS.USER);
 
         if (token && userStr) {
           try {
@@ -62,7 +47,7 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage',
+      name: STORAGE_KEYS.AUTH_STORAGE,
       partialize: (state) => ({
         user: state.user,
         token: state.token,

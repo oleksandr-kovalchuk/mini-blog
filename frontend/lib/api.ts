@@ -1,25 +1,18 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+import { API_BASE_URL, STORAGE_KEYS, DEFAULT_HEADERS } from './config';
+import type {
+  AuthResponse,
+  UserResponse,
+  UpdateUserResponse,
+  RegisterData,
+  LoginData,
+  CreatePostData,
+  UpdatePostData,
+  UpdateUserData,
+} from './types';
 
 function getToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem('token');
-}
-
-export interface ApiResponse<T = unknown> {
-  message?: string;
-  error?: string;
-  data?: T;
-}
-
-export interface AuthResponse {
-  message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    createdAt: string;
-  };
-  token: string;
+  return localStorage.getItem(STORAGE_KEYS.TOKEN);
 }
 
 async function makeRequest<T>(
@@ -33,7 +26,7 @@ async function makeRequest<T>(
 
   const config: RequestInit = {
     headers: {
-      'Content-Type': 'application/json',
+      ...DEFAULT_HEADERS,
       ...(token && { Authorization: `Bearer ${token}` }),
       ...options.headers,
     },
@@ -55,21 +48,14 @@ async function makeRequest<T>(
   }
 }
 
-export async function register(data: {
-  name: string;
-  email: string;
-  password: string;
-}): Promise<AuthResponse> {
+export async function register(data: RegisterData): Promise<AuthResponse> {
   return makeRequest<AuthResponse>('/auth/register', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function login(data: {
-  email: string;
-  password: string;
-}): Promise<AuthResponse> {
+export async function login(data: LoginData): Promise<AuthResponse> {
   return makeRequest<AuthResponse>('/auth/login', {
     method: 'POST',
     body: JSON.stringify(data),
@@ -84,17 +70,14 @@ export async function getPost(id: string) {
   return makeRequest(`/posts/${id}`);
 }
 
-export async function createPost(data: { title: string; content: string }) {
+export async function createPost(data: CreatePostData) {
   return makeRequest('/posts', {
     method: 'POST',
     body: JSON.stringify(data),
   });
 }
 
-export async function updatePost(
-  id: string,
-  data: { title?: string; content?: string }
-) {
+export async function updatePost(id: string, data: UpdatePostData) {
   return makeRequest(`/posts/${id}`, {
     method: 'PUT',
     body: JSON.stringify(data),
@@ -107,36 +90,13 @@ export async function deletePost(id: string) {
   });
 }
 
-export interface UserResponse {
-  id: string;
-  name: string;
-  email: string;
-  createdAt: string;
-  updatedAt: string;
-  _count: {
-    posts: number;
-  };
-}
-
-export interface UpdateUserResponse {
-  message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    updatedAt: string;
-  };
-}
-
 export async function getCurrentUser(): Promise<UserResponse> {
   return makeRequest<UserResponse>('/users/me');
 }
 
-export async function updateUser(data: {
-  name?: string;
-  email?: string;
-  password?: string;
-}): Promise<UpdateUserResponse> {
+export async function updateUser(
+  data: UpdateUserData
+): Promise<UpdateUserResponse> {
   return makeRequest<UpdateUserResponse>('/users/me', {
     method: 'PUT',
     body: JSON.stringify(data),
