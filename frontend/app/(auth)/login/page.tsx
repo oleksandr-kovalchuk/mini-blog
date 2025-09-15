@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/form';
 import { Loader2, LogIn } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
-import { apiClient } from '@/lib/api';
+import { login as apiLogin } from '@/lib/api';
 
 const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
@@ -54,7 +54,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const result = await apiClient.login(data);
+      const result = await apiLogin(data);
 
       login(result.user, result.token);
 

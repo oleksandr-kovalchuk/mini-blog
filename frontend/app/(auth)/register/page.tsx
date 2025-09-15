@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/form';
 import { Loader2, UserPlus } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
-import { apiClient } from '@/lib/api';
+import { register as apiRegister } from '@/lib/api';
 
 const registerSchema = z.object({
   name: z
@@ -59,7 +59,7 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const result = await apiClient.register(data);
+      const result = await apiRegister(data);
 
       login(result.user, result.token);
 

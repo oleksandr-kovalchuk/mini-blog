@@ -23,21 +23,21 @@ export const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      
+
       login: (user: User, token: string) => {
         set({ user, token, isAuthenticated: true });
       },
-      
+
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
         localStorage.removeItem('token');
         localStorage.removeItem('user');
       },
-      
+
       initialize: () => {
         const token = localStorage.getItem('token');
         const userStr = localStorage.getItem('user');
-        
+
         if (token && userStr) {
           try {
             const user = JSON.parse(userStr);
@@ -51,10 +51,10 @@ export const useAuthStore = create<AuthState>()(
     }),
     {
       name: 'auth-storage',
-      partialize: (state) => ({ 
-        user: state.user, 
-        token: state.token, 
-        isAuthenticated: state.isAuthenticated 
+      partialize: (state) => ({
+        user: state.user,
+        token: state.token,
+        isAuthenticated: state.isAuthenticated,
       }),
     }
   )
