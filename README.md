@@ -20,8 +20,8 @@ A modern blog application built with Next.js, Express.js, TypeScript, and Postgr
 
 ### With Docker (Recommended)
 ```bash
-git clone <repository-url>
-cd full-stack-mini-blog
+git clone https://github.com/oleksandr-kovalchuk/mini-blog.git
+cd mini-blog
 docker-compose up --build
 ```
 
