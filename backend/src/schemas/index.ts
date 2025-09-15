@@ -1,14 +1,14 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().min(1, 'Name must be at least 2 characters'),
+  name: z.string().min(1, 'Name must be at least 1 characters'),
   email: z.string().email('Invalid email format'),
-  password: z.string().min(3, 'Password must be at least 6 characters'),
+  password: z.string().min(3, 'Password must be at least 3 characters'),
 });
 
 export const loginSchema = z.object({
   email: z.string().email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
+  password: z.string().min(3, 'Password is required'),
 });
 
 export const createPostSchema = z.object({
@@ -18,11 +18,11 @@ export const createPostSchema = z.object({
 
 export const updateUserSchema = z
   .object({
-    name: z.string().min(1, 'Name must be at least 2 characters').optional(),
+    name: z.string().min(1, 'Name must be at least 1 characters').optional(),
     email: z.string().email('Invalid email format').optional(),
     password: z
       .string()
-      .min(3, 'Password must be at least 6 characters')
+      .min(3, 'Password must be at least 3 characters')
       .optional(),
   })
   .refine((data) => Object.keys(data).length > 0, {
