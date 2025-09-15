@@ -43,7 +43,6 @@ async function makeRequest<T>(
 
     return data;
   } catch (error) {
-    console.error('API request failed:', error);
     throw error;
   }
 }

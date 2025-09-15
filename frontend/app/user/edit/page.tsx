@@ -57,9 +57,8 @@ export default function EditUserPage() {
           password: '',
           confirmPassword: '',
         });
-      } catch (err) {
+      } catch {
         setError('Failed to load user data');
-        console.error('Error loading user data:', err);
       } finally {
         setIsLoadingUser(false);
       }

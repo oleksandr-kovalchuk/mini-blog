@@ -39,8 +39,7 @@ export const useAuthStore = create<AuthState>()(
           try {
             const user = JSON.parse(userStr);
             set({ user, token, isAuthenticated: true });
-          } catch (error) {
-            console.error('Error parsing user data:', error);
+          } catch {
             get().logout();
           }
         }
