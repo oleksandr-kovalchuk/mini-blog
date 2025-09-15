@@ -52,10 +52,9 @@ export default function NewPostPage() {
 
       setSuccess(true);
 
-      // Redirect to the new post after a short delay
       setTimeout(() => {
         router.push(`/posts/${response.post.id}`);
-      }, 1500);
+      }, 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create post');
     } finally {
@@ -73,7 +72,6 @@ export default function NewPostPage() {
     if (error) setError(null);
   };
 
-  // Show loading state while checking authentication
   if (!isAuthenticated && !user) {
     return (
       <div className="min-h-screen bg-gray-50">
@@ -104,20 +102,6 @@ export default function NewPostPage() {
               <p className="text-sm text-green-700 mb-4">
                 Redirecting you to your new post...
               </p>
-              <div className="flex space-x-2">
-                <Button onClick={() => router.push('/posts')} variant="outline">
-                  View All Posts
-                </Button>
-                <Button
-                  onClick={() => {
-                    setSuccess(false);
-                    setTitle('');
-                    setContent('');
-                  }}
-                >
-                  Create Another Post
-                </Button>
-              </div>
             </CardContent>
           </Card>
         </div>
