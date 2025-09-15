@@ -38,7 +38,7 @@ export function AuthNav() {
         </Button>
       </Link>
       <Button variant="ghost" size="sm" onClick={logout}>
-        <LogOut className="h-4 w-4 mr-2" />
+        <LogOut className="h-4 w-4 mr-1" />
         Sign Out
       </Button>
     </div>
