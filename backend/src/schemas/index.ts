@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const registerSchema = z.object({
-  name: z.string().min(1, 'Name must be at least 1 characters'),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email format'),
   password: z.string().min(3, 'Password must be at least 3 characters'),
 });
@@ -18,7 +18,7 @@ export const createPostSchema = z.object({
 
 export const updateUserSchema = z
   .object({
-    name: z.string().min(1, 'Name must be at least 1 characters').optional(),
+    name: z.string().min(2, 'Name must be at least 2 characters').optional(),
     email: z.string().email('Invalid email format').optional(),
     password: z
       .string()

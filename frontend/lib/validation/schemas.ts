@@ -11,7 +11,7 @@ export const registerSchema = z.object({
     .min(1, 'Name is required')
     .min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
+  password: z.string().min(3, 'Password must be at least 3 characters'),
 });
 
 export const updateUserSchema = z
