@@ -17,7 +17,6 @@ export const errorHandler = (
   }
 
   if (error.code === 'P2002') {
-    // Prisma unique constraint error
     return res.status(409).json({
       error: 'Resource already exists',
     });

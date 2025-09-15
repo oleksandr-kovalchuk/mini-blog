@@ -4,7 +4,9 @@ import { UserResponse, UpdateUserData, UpdateUserResponse } from '../types';
 
 const prisma = new PrismaClient();
 
-export const getCurrentUser = async (userId: string): Promise<UserResponse | null> => {
+export const getCurrentUser = async (
+  userId: string
+): Promise<UserResponse | null> => {
   const user = await prisma.user.findUnique({
     where: { id: userId },
     select: {
@@ -22,7 +24,10 @@ export const getCurrentUser = async (userId: string): Promise<UserResponse | nul
   return user;
 };
 
-export const updateUser = async (userId: string, data: UpdateUserData): Promise<UpdateUserResponse> => {
+export const updateUser = async (
+  userId: string,
+  data: UpdateUserData
+): Promise<UpdateUserResponse> => {
   const updateData: any = {};
 
   if (data.name) updateData.name = data.name;
@@ -48,7 +53,9 @@ export const updateUser = async (userId: string, data: UpdateUserData): Promise<
   };
 };
 
-export const deleteUser = async (userId: string): Promise<{ message: string }> => {
+export const deleteUser = async (
+  userId: string
+): Promise<{ message: string }> => {
   await prisma.user.delete({
     where: { id: userId },
   });

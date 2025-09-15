@@ -6,7 +6,7 @@ export const register = async (req: Request, res: Response): Promise<void> => {
   try {
     const validatedData = registerSchema.parse(req.body);
     const result = await registerUser(validatedData);
-    
+
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof Error) {
@@ -21,7 +21,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const validatedData = loginSchema.parse(req.body);
     const result = await loginUser(validatedData);
-    
+
     res.json(result);
   } catch (error) {
     if (error instanceof Error) {

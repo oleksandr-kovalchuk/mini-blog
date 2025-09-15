@@ -5,7 +5,9 @@ import { RegisterData, LoginData, AuthResponse } from '../types';
 
 const prisma = new PrismaClient();
 
-export const registerUser = async (data: RegisterData): Promise<AuthResponse> => {
+export const registerUser = async (
+  data: RegisterData
+): Promise<AuthResponse> => {
   const hashedPassword = await bcrypt.hash(data.password, 12);
 
   const user = await prisma.user.create({
@@ -19,6 +21,12 @@ export const registerUser = async (data: RegisterData): Promise<AuthResponse> =>
       name: true,
       email: true,
       createdAt: true,
+      updatedAt: true,
+      _count: {
+        select: {
+          posts: true,
+        },
+      },
     },
   });
 
@@ -59,6 +67,10 @@ export const loginUser = async (data: LoginData): Promise<AuthResponse> => {
       name: user.name,
       email: user.email,
       createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
+      _count: {
+        posts: 0,
+      },
     },
     token,
   };

@@ -1,7 +1,11 @@
 import express from 'express';
 import asyncHandler from 'express-async-handler';
 import { authenticateToken } from '../middleware/auth';
-import { getPosts, getPost, createNewPost } from '../controllers/postController';
+import {
+  getPosts,
+  getPost,
+  createNewPost,
+} from '../controllers/postController';
 
 const router = express.Router();
 
