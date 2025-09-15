@@ -1,5 +1,10 @@
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
 
+function getToken(): string | null {
+  if (typeof window === 'undefined') return null;
+  return localStorage.getItem('token');
+}
+
 export interface ApiResponse<T = unknown> {
   message?: string;
   error?: string;
@@ -24,8 +29,7 @@ async function makeRequest<T>(
 ): Promise<T> {
   const url = `${baseURL}${endpoint}`;
 
-  const token =
-    typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const token = getToken();
 
   const config: RequestInit = {
     headers: {
