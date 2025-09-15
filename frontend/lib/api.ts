@@ -107,16 +107,37 @@ export async function deletePost(id: string) {
   });
 }
 
-export async function getCurrentUser() {
-  return makeRequest('/users/me');
+export interface UserResponse {
+  id: string;
+  name: string;
+  email: string;
+  createdAt: string;
+  updatedAt: string;
+  _count: {
+    posts: number;
+  };
+}
+
+export interface UpdateUserResponse {
+  message: string;
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    updatedAt: string;
+  };
+}
+
+export async function getCurrentUser(): Promise<UserResponse> {
+  return makeRequest<UserResponse>('/users/me');
 }
 
 export async function updateUser(data: {
   name?: string;
   email?: string;
   password?: string;
-}) {
-  return makeRequest('/users/me', {
+}): Promise<UpdateUserResponse> {
+  return makeRequest<UpdateUserResponse>('/users/me', {
     method: 'PUT',
     body: JSON.stringify(data),
   });

@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { useAuthStore } from "@/lib/auth-store";
-import { LogOut, User } from "lucide-react";
+import { useEffect } from 'react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useAuthStore } from '@/lib/auth-store';
+import { LogOut, User } from 'lucide-react';
 
 export function AuthNav() {
   const { user, isAuthenticated, logout, initialize } = useAuthStore();
@@ -32,6 +32,11 @@ export function AuthNav() {
         <User className="h-4 w-4" />
         <span className="text-sm font-medium">{user.name}</span>
       </div>
+      <Link href="/user/edit">
+        <Button variant="ghost" size="sm">
+          Edit Profile
+        </Button>
+      </Link>
       <Button variant="ghost" size="sm" onClick={logout}>
         <LogOut className="h-4 w-4 mr-2" />
         Sign Out
