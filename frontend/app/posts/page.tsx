@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { getPosts } from '@/lib/api';
 import { Plus, Calendar, User } from 'lucide-react';
 import type { Post } from '@/lib/types';

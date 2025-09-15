@@ -3,7 +3,7 @@
 import { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { LogOut, User } from 'lucide-react';
 
 export function AuthNav() {

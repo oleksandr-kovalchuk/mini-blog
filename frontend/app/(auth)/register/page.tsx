@@ -24,10 +24,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2, UserPlus } from 'lucide-react';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { register as apiRegister } from '@/lib/api';
-import { registerSchema } from '@/lib/schemas';
-import type { RegisterFormData } from '@/lib/form-types';
+import { registerSchema } from '@/lib/validation/schemas';
+import type { RegisterFormData } from '@/lib/validation/form-types';
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);

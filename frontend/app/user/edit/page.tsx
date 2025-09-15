@@ -23,11 +23,11 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2, User, Save, ArrowLeft } from 'lucide-react';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { getCurrentUser, updateUser } from '@/lib/api';
 import type { UserResponse, UpdateUserResponse } from '@/lib/types';
-import { updateUserSchema } from '@/lib/schemas';
-import type { UpdateUserFormData } from '@/lib/form-types';
+import { updateUserSchema } from '@/lib/validation/schemas';
+import type { UpdateUserFormData } from '@/lib/validation/form-types';
 
 export default function EditUserPage() {
   const [isLoading, setIsLoading] = useState(false);

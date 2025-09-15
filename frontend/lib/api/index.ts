@@ -1,4 +1,4 @@
-import { API_BASE_URL, STORAGE_KEYS, DEFAULT_HEADERS } from './config';
+import { API_BASE_URL, STORAGE_KEYS, DEFAULT_HEADERS } from '../config';
 import type {
   AuthResponse,
   UserResponse,
@@ -8,7 +8,7 @@ import type {
   CreatePostData,
   UpdatePostData,
   UpdateUserData,
-} from './types';
+} from '../types';
 
 function getToken(): string | null {
   if (typeof window === 'undefined') return null;

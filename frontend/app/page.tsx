@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { BookOpen, Plus, User } from 'lucide-react';
 
 export default function Home() {

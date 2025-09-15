@@ -24,10 +24,10 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Loader2, LogIn } from 'lucide-react';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { login as apiLogin } from '@/lib/api';
-import { loginSchema } from '@/lib/schemas';
-import type { LoginFormData } from '@/lib/form-types';
+import { loginSchema } from '@/lib/validation/schemas';
+import type { LoginFormData } from '@/lib/validation/form-types';
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);

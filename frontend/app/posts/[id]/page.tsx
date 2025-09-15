@@ -11,7 +11,7 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useAuthStore } from '@/lib/auth-store';
+import { useAuthStore } from '@/lib/auth/store';
 import { getPost } from '@/lib/api';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import type { Post } from '@/lib/types';
