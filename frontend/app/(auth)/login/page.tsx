@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,13 +26,8 @@ import {
 import { Loader2, LogIn } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
 import { login as apiLogin } from '@/lib/api';
-
-const loginSchema = z.object({
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(1, 'Password is required'),
-});
-
-type LoginFormData = z.infer<typeof loginSchema>;
+import { loginSchema } from '@/lib/schemas';
+import type { LoginFormData } from '@/lib/form-types';
 
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);

@@ -14,19 +14,7 @@ import {
 import { useAuthStore } from '@/lib/auth-store';
 import { getPost } from '@/lib/api';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+import type { Post } from '@/lib/types';
 
 export default function SinglePostPage() {
   const [post, setPost] = useState<Post | null>(null);

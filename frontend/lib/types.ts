@@ -79,3 +79,16 @@ export interface UpdateUserData {
   email?: string;
   password?: string;
 }
+
+export interface Post {
+  id: string;
+  title: string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  author: {
+    id: string;
+    name: string;
+    email: string;
+  };
+}

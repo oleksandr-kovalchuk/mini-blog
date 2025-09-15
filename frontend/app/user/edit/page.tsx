@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,41 +26,8 @@ import { Loader2, User, Save, ArrowLeft } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
 import { getCurrentUser, updateUser } from '@/lib/api';
 import type { UserResponse, UpdateUserResponse } from '@/lib/types';
-
-const updateUserSchema = z
-  .object({
-    name: z.string().min(1, 'Name is required').optional(),
-    email: z.string().email('Invalid email format').optional(),
-    password: z
-      .string()
-      .refine((val) => val === '' || val.length >= 3, {
-        message: 'Password must be at least 3 characters',
-      })
-      .optional(),
-    confirmPassword: z.string().optional(),
-  })
-  .refine(
-    (data) =>
-      Object.keys(data).filter((key) => data[key as keyof typeof data] !== '')
-        .length > 0,
-    {
-      message: 'At least one field must be provided',
-    }
-  )
-  .refine(
-    (data) => {
-      if (data.password && data.confirmPassword) {
-        return data.password === data.confirmPassword;
-      }
-      return true;
-    },
-    {
-      message: 'Passwords do not match',
-      path: ['confirmPassword'],
-    }
-  );
-
-type UpdateUserFormData = z.infer<typeof updateUserSchema>;
+import { updateUserSchema } from '@/lib/schemas';
+import type { UpdateUserFormData } from '@/lib/form-types';
 
 export default function EditUserPage() {
   const [isLoading, setIsLoading] = useState(false);

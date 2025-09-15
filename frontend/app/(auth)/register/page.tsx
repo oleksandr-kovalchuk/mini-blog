@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -27,17 +26,8 @@ import {
 import { Loader2, UserPlus } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth-store';
 import { register as apiRegister } from '@/lib/api';
-
-const registerSchema = z.object({
-  name: z
-    .string()
-    .min(1, 'Name is required')
-    .min(2, 'Name must be at least 2 characters'),
-  email: z.string().email('Invalid email format'),
-  password: z.string().min(6, 'Password must be at least 6 characters'),
-});
-
-type RegisterFormData = z.infer<typeof registerSchema>;
+import { registerSchema } from '@/lib/schemas';
+import type { RegisterFormData } from '@/lib/form-types';
 
 export default function RegisterPage() {
   const [isLoading, setIsLoading] = useState(false);

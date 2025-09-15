@@ -13,19 +13,7 @@ import {
 import { useAuthStore } from '@/lib/auth-store';
 import { getPosts } from '@/lib/api';
 import { Plus, Calendar, User } from 'lucide-react';
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  createdAt: string;
-  updatedAt: string;
-  author: {
-    id: string;
-    name: string;
-    email: string;
-  };
-}
+import type { Post } from '@/lib/types';
 
 export default function PostsPage() {
   const [posts, setPosts] = useState<Post[]>([]);
