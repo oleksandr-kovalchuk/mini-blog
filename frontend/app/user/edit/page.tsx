@@ -38,7 +38,9 @@ const updateUserSchema = z
     email: z.string().email('Invalid email format').optional(),
     password: z
       .string()
-      .min(3, 'Password must be at least 3 characters')
+      .refine((val) => val === '' || val.length >= 3, {
+        message: 'Password must be at least 3 characters',
+      })
       .optional(),
     confirmPassword: z.string().optional(),
   })
