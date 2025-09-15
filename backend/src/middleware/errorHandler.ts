@@ -17,6 +17,11 @@ export const errorHandler = (
   }
 
   if (error.code === 'P2002') {
+    if (error.meta?.target?.includes('email')) {
+      return res.status(409).json({
+        error: 'Email already exists',
+      });
+    }
     return res.status(409).json({
       error: 'Resource already exists',
     });

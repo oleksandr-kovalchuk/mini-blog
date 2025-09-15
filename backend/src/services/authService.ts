@@ -8,37 +8,44 @@ const prisma = new PrismaClient();
 export const registerUser = async (
   data: RegisterData
 ): Promise<AuthResponse> => {
-  const hashedPassword = await bcrypt.hash(data.password, 12);
+  try {
+    const hashedPassword = await bcrypt.hash(data.password, 12);
 
-  const user = await prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: hashedPassword,
-    },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      createdAt: true,
-      updatedAt: true,
-      _count: {
-        select: {
-          posts: true,
+    const user = await prisma.user.create({
+      data: {
+        name: data.name,
+        email: data.email,
+        password: hashedPassword,
+      },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        updatedAt: true,
+        _count: {
+          select: {
+            posts: true,
+          },
         },
       },
-    },
-  });
+    });
 
-  const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
-    expiresIn: '7d',
-  });
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET!, {
+      expiresIn: '7d',
+    });
 
-  return {
-    message: 'User created successfully',
-    user,
-    token,
-  };
+    return {
+      message: 'User created successfully',
+      user,
+      token,
+    };
+  } catch (error: any) {
+    if (error.code === 'P2002' && error.meta?.target?.includes('email')) {
+      throw new Error('Email already exists');
+    }
+    throw error;
+  }
 };
 
 export const loginUser = async (data: LoginData): Promise<AuthResponse> => {

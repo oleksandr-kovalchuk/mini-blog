@@ -10,7 +10,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
     res.status(201).json(result);
   } catch (error) {
     if (error instanceof Error) {
-      res.status(400).json({ error: error.message });
+      if (error.message === 'Email already exists') {
+        res.status(409).json({ error: error.message });
+      } else {
+        res.status(400).json({ error: error.message });
+      }
     } else {
       res.status(500).json({ error: 'Internal server error' });
     }
