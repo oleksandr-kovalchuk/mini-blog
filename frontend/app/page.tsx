@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/auth/store';
-import { BookOpen, Plus, User } from 'lucide-react';
+import { BookOpen, Plus, User, Eye } from 'lucide-react';
 
 export default function Home() {
   const { user, isAuthenticated, initialize } = useAuthStore();
@@ -73,12 +73,20 @@ export default function Home() {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <div className="flex space-x-4">
-                  <Link href="/login">
-                    <Button>Sign In</Button>
-                  </Link>
-                  <Link href="/register">
-                    <Button variant="outline">Sign Up</Button>
+                <div className="flex items-center justify-between">
+                  <div className="flex space-x-4">
+                    <Link href="/login">
+                      <Button>Sign In</Button>
+                    </Link>
+                    <Link href="/register">
+                      <Button variant="outline">Sign Up</Button>
+                    </Link>
+                  </div>
+                  <Link href="/posts">
+                    <Button className="bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                      <Eye className="h-4 w-4 mr-2" />
+                      See All Posts
+                    </Button>
                   </Link>
                 </div>
               </CardContent>
