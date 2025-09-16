@@ -12,6 +12,7 @@ import {
 } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/auth/store';
 import { getPosts } from '@/lib/api';
+import { formatDate, getShortDescription } from '@/lib/utils';
 import { Plus, Calendar, User } from 'lucide-react';
 import type { Post } from '@/lib/types';
 
@@ -36,19 +37,6 @@ export default function PostsPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
-  const getShortDescription = (content: string, maxLength: number = 150) => {
-    if (content.length <= maxLength) return content;
-    return content.substring(0, maxLength).trim() + '...';
   };
 
   if (loading) {

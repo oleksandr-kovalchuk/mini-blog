@@ -13,6 +13,7 @@ import {
 } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/auth/store';
 import { getPost } from '@/lib/api';
+import { formatDateWithTime, formatRelativeTime } from '@/lib/utils';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import type { Post } from '@/lib/types';
 
@@ -40,39 +41,6 @@ export default function SinglePostPage() {
       setError(err instanceof Error ? err.message : 'Failed to fetch post');
     } finally {
       setLoading(false);
-    }
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
-  const formatRelativeTime = (dateString: string) => {
-    const now = new Date();
-    const postDate = new Date(dateString);
-    const diffInSeconds = Math.floor(
-      (now.getTime() - postDate.getTime()) / 1000
-    );
-
-    if (diffInSeconds < 60) {
-      return 'Just now';
-    } else if (diffInSeconds < 3600) {
-      const minutes = Math.floor(diffInSeconds / 60);
-      return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
-    } else if (diffInSeconds < 86400) {
-      const hours = Math.floor(diffInSeconds / 3600);
-      return `${hours} hour${hours > 1 ? 's' : ''} ago`;
-    } else if (diffInSeconds < 2592000) {
-      const days = Math.floor(diffInSeconds / 86400);
-      return `${days} day${days > 1 ? 's' : ''} ago`;
-    } else {
-      return formatDate(dateString);
     }
   };
 
@@ -141,7 +109,7 @@ export default function SinglePostPage() {
               </div>
               <div className="flex items-center">
                 <Calendar className="h-4 w-4 mr-2" />
-                <span>{formatDate(post.createdAt)}</span>
+                <span>{formatDateWithTime(post.createdAt)}</span>
               </div>
               <div className="flex items-center">
                 <Clock className="h-4 w-4 mr-2" />
@@ -163,7 +131,9 @@ export default function SinglePostPage() {
             <CardContent className="pt-6">
               <div className="flex items-center text-sm text-blue-700">
                 <Clock className="h-4 w-4 mr-2" />
-                <span>Last updated on {formatDate(post.updatedAt)}</span>
+                <span>
+                  Last updated on {formatDateWithTime(post.updatedAt)}
+                </span>
               </div>
             </CardContent>
           </Card>
