@@ -270,7 +270,7 @@ export default function EditUserPage() {
                   />
                 </div>
               </CardContent>
-              <CardFooter className="flex flex-col space-y-4 pt-6">
+              <CardFooter className="pt-6">
                 <Button type="submit" className="w-full" disabled={isLoading}>
                   {isLoading ? (
                     <>
@@ -284,28 +284,56 @@ export default function EditUserPage() {
                     </>
                   )}
                 </Button>
-
-                <div className="border-t pt-4">
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-3">Danger Zone</p>
-                    <Button
-                      type="button"
-                      variant="destructive"
-                      onClick={() => setShowDeleteConfirm(true)}
-                      disabled={isLoading || isDeleting}
-                      className="w-full"
-                    >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      Delete Account
-                    </Button>
-                  </div>
-                </div>
               </CardFooter>
             </form>
           </Form>
         </Card>
 
-        {/* Delete Confirmation Dialog */}
+        <Card className="mt-8 border-red-200 bg-red-50/30">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-xl text-red-800 flex items-center">
+              <div className="w-2 h-2 bg-red-500 rounded-full mr-3"></div>
+              Danger Zone
+            </CardTitle>
+            <CardDescription className="text-red-700">
+              Irreversible and destructive actions
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <div className="bg-white border border-red-200 rounded-lg p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h4 className="font-medium text-gray-900 mb-1">
+                    Delete Account
+                  </h4>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Permanently delete your account and all associated data.
+                    This action cannot be undone.
+                  </p>
+                  <div className="flex items-center text-sm text-red-600 mb-4">
+                    <div className="w-1 h-1 bg-red-500 rounded-full mr-2"></div>
+                    All your posts will be deleted
+                  </div>
+                  <div className="flex items-center text-sm text-red-600">
+                    <div className="w-1 h-1 bg-red-500 rounded-full mr-2"></div>
+                    Your profile information will be removed
+                  </div>
+                </div>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={() => setShowDeleteConfirm(true)}
+                  disabled={isLoading || isDeleting}
+                  className="ml-4 shrink-0"
+                >
+                  <Trash2 className="mr-2 h-4 w-4" />
+                  Delete Account
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {showDeleteConfirm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
