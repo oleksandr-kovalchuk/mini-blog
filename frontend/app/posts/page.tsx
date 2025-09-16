@@ -24,8 +24,11 @@ export default function PostsPage() {
 
   useEffect(() => {
     initialize();
-    fetchPosts();
   }, [initialize]);
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
 
   const fetchPosts = async () => {
     try {

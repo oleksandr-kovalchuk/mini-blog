@@ -29,10 +29,13 @@ export default function NewPostPage() {
 
   useEffect(() => {
     initialize();
+  }, [initialize]);
+
+  useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router, initialize]);
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

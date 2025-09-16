@@ -27,10 +27,13 @@ export default function SinglePostPage() {
 
   useEffect(() => {
     initialize();
+  }, [initialize]);
+
+  useEffect(() => {
     if (params.id) {
       fetchPost(params.id as string);
     }
-  }, [params.id, initialize]);
+  }, [params.id]);
 
   const fetchPost = async (id: string) => {
     try {
