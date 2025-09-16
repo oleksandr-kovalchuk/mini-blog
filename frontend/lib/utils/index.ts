@@ -156,3 +156,14 @@ export function getLoadingContext(pathname: string | null): LoadingContext {
     message: 'Please wait while we load the page',
   };
 }
+
+export async function withMinimumDelay<T>(
+  promise: Promise<T>,
+  minDelay: number = 800
+): Promise<T> {
+  const [result] = await Promise.all([
+    promise,
+    new Promise((resolve) => setTimeout(resolve, minDelay)),
+  ]);
+  return result;
+}

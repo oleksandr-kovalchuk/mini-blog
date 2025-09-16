@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useAuthStore } from '@/lib/auth/store';
+import { withMinimumDelay } from '@/lib/utils';
 
 interface AuthProviderProps {
   children: React.ReactNode;
@@ -12,8 +13,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { initialize } = useAuthStore();
 
   useEffect(() => {
-    initialize();
-    setIsInitialized(true);
+    const initializeAuth = async () => {
+      await withMinimumDelay(
+        new Promise<void>((resolve) => {
+          initialize();
+          resolve();
+        }),
+        600
+      );
+      setIsInitialized(true);
+    };
+
+    initializeAuth();
   }, [initialize]);
 
   if (!isInitialized) {

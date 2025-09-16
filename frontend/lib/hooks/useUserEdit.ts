@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAuthStore } from '@/lib/auth/store';
 import { getCurrentUser, updateUser, deleteUser } from '@/lib/api';
 import { updateUserSchema } from '@/lib/validation/schemas';
+import { withMinimumDelay } from '@/lib/utils';
 import type { UpdateUserFormData } from '@/lib/validation/form-types';
 import type { UserResponse, UpdateUserResponse } from '@/lib/types';
 
@@ -32,7 +33,9 @@ export function useUserEdit() {
   useEffect(() => {
     const loadUserData = async () => {
       try {
-        const currentUser: UserResponse = await getCurrentUser();
+        const currentUser: UserResponse = await withMinimumDelay(
+          getCurrentUser()
+        );
         form.reset({
           name: currentUser.name,
           email: currentUser.email,
@@ -70,7 +73,9 @@ export function useUserEdit() {
         updateData.password = data.password;
       }
 
-      const result: UpdateUserResponse = await updateUser(updateData);
+      const result: UpdateUserResponse = await withMinimumDelay(
+        updateUser(updateData)
+      );
 
       if (result.user) {
         updateAuthUser({
@@ -94,7 +99,7 @@ export function useUserEdit() {
     setError(null);
 
     try {
-      await deleteUser();
+      await withMinimumDelay(deleteUser());
       logout();
       router.push('/');
     } catch (err) {

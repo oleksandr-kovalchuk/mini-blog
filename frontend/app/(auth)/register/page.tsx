@@ -27,6 +27,7 @@ import { Loader2, UserPlus } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth/store';
 import { register as apiRegister } from '@/lib/api';
 import { registerSchema } from '@/lib/validation/schemas';
+import { withMinimumDelay } from '@/lib/utils';
 import type { RegisterFormData } from '@/lib/validation/form-types';
 
 export default function RegisterPage() {
@@ -49,7 +50,7 @@ export default function RegisterPage() {
     setError(null);
 
     try {
-      const result = await apiRegister(data);
+      const result = await withMinimumDelay(apiRegister(data));
 
       login(result.user, result.token);
 

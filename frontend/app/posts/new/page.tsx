@@ -16,6 +16,7 @@ import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/lib/auth/store';
 import { createPost } from '@/lib/api';
 import { AuthGuard } from '@/components/auth-guard';
+import { withMinimumDelay } from '@/lib/utils';
 import { ArrowLeft, Save, Loader2, Eye, Plus, List } from 'lucide-react';
 
 export default function NewPostPage() {
@@ -40,10 +41,12 @@ export default function NewPostPage() {
       setLoading(true);
       setError(null);
 
-      const response = (await createPost({
-        title: title.trim(),
-        content: content.trim(),
-      })) as { post: { id: string } };
+      const response = (await withMinimumDelay(
+        createPost({
+          title: title.trim(),
+          content: content.trim(),
+        })
+      )) as { post: { id: string } };
 
       setCreatedPostId(response.post.id);
       setSuccess(true);

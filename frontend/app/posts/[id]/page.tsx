@@ -13,7 +13,11 @@ import {
 } from '@/components/ui/card';
 import { useAuthStore } from '@/lib/auth/store';
 import { getPost } from '@/lib/api';
-import { formatDateWithTime, formatRelativeTime } from '@/lib/utils';
+import {
+  formatDateWithTime,
+  formatRelativeTime,
+  withMinimumDelay,
+} from '@/lib/utils';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import type { Post } from '@/lib/types';
 
@@ -38,7 +42,7 @@ export default function SinglePostPage() {
   const fetchPost = async (id: string) => {
     try {
       setLoading(true);
-      const data = (await getPost(id)) as Post;
+      const data = (await withMinimumDelay(getPost(id))) as Post;
       setPost(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch post');

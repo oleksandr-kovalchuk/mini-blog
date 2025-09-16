@@ -13,7 +13,7 @@ import {
 import { Pagination } from '@/components/ui/pagination';
 import { useAuthStore } from '@/lib/auth/store';
 import { getPosts } from '@/lib/api';
-import { formatDate, getShortDescription } from '@/lib/utils';
+import { formatDate, getShortDescription, withMinimumDelay } from '@/lib/utils';
 import { PAGINATION_CONFIG } from '@/lib/config';
 import { Plus, Calendar, User } from 'lucide-react';
 import type { Post, PaginatedResponse } from '@/lib/types';
@@ -38,10 +38,12 @@ export default function PostsPage() {
   const fetchPosts = async (page: number) => {
     try {
       setLoading(true);
-      const data = await getPosts({
-        page,
-        limit: PAGINATION_CONFIG.POSTS_PER_PAGE,
-      });
+      const data = await withMinimumDelay(
+        getPosts({
+          page,
+          limit: PAGINATION_CONFIG.POSTS_PER_PAGE,
+        })
+      );
       setPostsData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch posts');

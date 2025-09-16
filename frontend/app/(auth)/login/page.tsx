@@ -27,6 +27,7 @@ import { Loader2, LogIn } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth/store';
 import { login as apiLogin } from '@/lib/api';
 import { loginSchema } from '@/lib/validation/schemas';
+import { withMinimumDelay } from '@/lib/utils';
 import type { LoginFormData } from '@/lib/validation/form-types';
 
 export default function LoginPage() {
@@ -48,7 +49,7 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const result = await apiLogin(data);
+      const result = await withMinimumDelay(apiLogin(data));
 
       login(result.user, result.token);
 
