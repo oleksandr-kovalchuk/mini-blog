@@ -13,7 +13,16 @@ import type {
 
 function getToken(): string | null {
   if (typeof window === 'undefined') return null;
-  return localStorage.getItem(STORAGE_KEYS.TOKEN);
+
+  try {
+    const authStorage = localStorage.getItem(STORAGE_KEYS.AUTH_STORAGE);
+    if (authStorage) {
+      const parsed = JSON.parse(authStorage);
+      return parsed.state?.token || null;
+    }
+  } catch {}
+
+  return null;
 }
 
 async function makeRequest<T>(

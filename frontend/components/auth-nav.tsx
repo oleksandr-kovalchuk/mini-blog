@@ -1,17 +1,12 @@
 'use client';
 
-import { useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/lib/auth/store';
 import { LogOut, User } from 'lucide-react';
 
 export function AuthNav() {
-  const { user, isAuthenticated, logout, initialize } = useAuthStore();
-
-  useEffect(() => {
-    initialize();
-  }, [initialize]);
+  const { user, isAuthenticated, logout } = useAuthStore();
 
   if (!isAuthenticated || !user) {
     return (

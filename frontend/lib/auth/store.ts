@@ -12,14 +12,10 @@ export const useAuthStore = create<AuthState>()(
 
       login: (user: User, token: string) => {
         set({ user, token, isAuthenticated: true });
-        localStorage.setItem(STORAGE_KEYS.TOKEN, token);
-        localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
       },
 
       logout: () => {
         set({ user: null, token: null, isAuthenticated: false });
-        localStorage.removeItem(STORAGE_KEYS.TOKEN);
-        localStorage.removeItem(STORAGE_KEYS.USER);
       },
 
       updateUser: (userData: Partial<User>) => {
@@ -27,21 +23,13 @@ export const useAuthStore = create<AuthState>()(
         if (currentUser) {
           const updatedUser = { ...currentUser, ...userData };
           set({ user: updatedUser });
-          localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(updatedUser));
         }
       },
 
       initialize: () => {
-        const token = localStorage.getItem(STORAGE_KEYS.TOKEN);
-        const userStr = localStorage.getItem(STORAGE_KEYS.USER);
-
-        if (token && userStr) {
-          try {
-            const user = JSON.parse(userStr);
-            set({ user, token, isAuthenticated: true });
-          } catch {
-            get().logout();
-          }
+        const state = get();
+        if (state.token && state.user) {
+          set({ isAuthenticated: true });
         }
       },
     }),
