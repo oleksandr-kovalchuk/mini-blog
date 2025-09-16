@@ -10,3 +10,7 @@ export const STORAGE_KEYS = {
 export const DEFAULT_HEADERS = {
   'Content-Type': 'application/json',
 } as const;
+
+export const PAGINATION_CONFIG = {
+  POSTS_PER_PAGE: 5,
+} as const;

@@ -1,25 +1,53 @@
 import { PrismaClient } from '@prisma/client';
-import { PostResponse, CreatePostData, CreatePostResponse } from '../types';
+import {
+  PostResponse,
+  CreatePostData,
+  CreatePostResponse,
+  PaginationParams,
+  PaginatedResponse,
+} from '../types';
 
 const prisma = new PrismaClient();
 
-export const getAllPosts = async (): Promise<PostResponse[]> => {
-  const posts = await prisma.post.findMany({
-    include: {
-      author: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
+export const getAllPosts = async (
+  params: PaginationParams = {}
+): Promise<PaginatedResponse<PostResponse>> => {
+  const page = params.page || 1;
+  const limit = params.limit || 5;
+  const skip = (page - 1) * limit;
+
+  const [posts, totalCount] = await Promise.all([
+    prisma.post.findMany({
+      skip,
+      take: limit,
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+          },
         },
       },
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-  });
+      orderBy: {
+        createdAt: 'desc',
+      },
+    }),
+    prisma.post.count(),
+  ]);
 
-  return posts;
+  const totalPages = Math.ceil(totalCount / limit);
+
+  return {
+    data: posts,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalCount,
+      hasNext: page < totalPages,
+      hasPrevious: page > 1,
+    },
+  };
 };
 
 export const getPostById = async (id: string): Promise<PostResponse | null> => {

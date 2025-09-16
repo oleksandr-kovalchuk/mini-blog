@@ -10,14 +10,19 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Pagination } from '@/components/ui/pagination';
 import { useAuthStore } from '@/lib/auth/store';
 import { getPosts } from '@/lib/api';
 import { formatDate, getShortDescription } from '@/lib/utils';
+import { PAGINATION_CONFIG } from '@/lib/config';
 import { Plus, Calendar, User } from 'lucide-react';
-import type { Post } from '@/lib/types';
+import type { Post, PaginatedResponse } from '@/lib/types';
 
 export default function PostsPage() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  const [postsData, setPostsData] = useState<PaginatedResponse<Post> | null>(
+    null
+  );
+  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { isAuthenticated, initialize } = useAuthStore();
@@ -27,19 +32,27 @@ export default function PostsPage() {
   }, [initialize]);
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    fetchPosts(currentPage);
+  }, [currentPage]);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (page: number) => {
     try {
       setLoading(true);
-      const data = (await getPosts()) as Post[];
-      setPosts(data);
+      const data = await getPosts({
+        page,
+        limit: PAGINATION_CONFIG.POSTS_PER_PAGE,
+      });
+      setPostsData(data);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch posts');
     } finally {
       setLoading(false);
     }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   if (loading) {
@@ -69,7 +82,7 @@ export default function PostsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <Button onClick={fetchPosts} variant="outline">
+              <Button onClick={() => fetchPosts(currentPage)} variant="outline">
                 Try Again
               </Button>
             </CardContent>
@@ -87,6 +100,11 @@ export default function PostsPage() {
             <h1 className="text-3xl font-bold text-gray-900">All Posts</h1>
             <p className="text-gray-600 mt-2">
               Discover stories and insights from our community
+              {postsData && (
+                <span className="ml-2 text-sm">
+                  ({postsData.pagination.totalCount} total posts)
+                </span>
+              )}
             </p>
           </div>
           {isAuthenticated && (
@@ -99,7 +117,7 @@ export default function PostsPage() {
           )}
         </div>
 
-        {posts.length === 0 ? (
+        {!postsData || postsData.data.length === 0 ? (
           <Card>
             <CardHeader>
               <CardTitle>No Posts Yet</CardTitle>
@@ -130,45 +148,60 @@ export default function PostsPage() {
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-6">
-            {posts.map((post) => (
-              <Card key={post.id} className="hover:shadow-md transition-shadow">
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <div className="flex-1">
+          <>
+            <div className="space-y-6">
+              {postsData.data.map((post) => (
+                <Card
+                  key={post.id}
+                  className="hover:shadow-md transition-shadow"
+                >
+                  <CardHeader>
+                    <div className="flex justify-between items-start">
+                      <div className="flex-1">
+                        <Link href={`/posts/${post.id}`}>
+                          <CardTitle className="text-xl hover:text-primary transition-colors cursor-pointer">
+                            {post.title}
+                          </CardTitle>
+                        </Link>
+                        <CardDescription className="mt-2">
+                          {getShortDescription(post.content)}
+                        </CardDescription>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex items-center justify-between text-sm text-gray-500">
+                      <div className="flex items-center space-x-4">
+                        <div className="flex items-center">
+                          <User className="h-4 w-4 mr-1" />
+                          <span>{post.author.name}</span>
+                        </div>
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-1" />
+                          <span>{formatDate(post.createdAt)}</span>
+                        </div>
+                      </div>
                       <Link href={`/posts/${post.id}`}>
-                        <CardTitle className="text-xl hover:text-primary transition-colors cursor-pointer">
-                          {post.title}
-                        </CardTitle>
+                        <Button variant="ghost" size="sm">
+                          Read More
+                        </Button>
                       </Link>
-                      <CardDescription className="mt-2">
-                        {getShortDescription(post.content)}
-                      </CardDescription>
                     </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center justify-between text-sm text-gray-500">
-                    <div className="flex items-center space-x-4">
-                      <div className="flex items-center">
-                        <User className="h-4 w-4 mr-1" />
-                        <span>{post.author.name}</span>
-                      </div>
-                      <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-1" />
-                        <span>{formatDate(post.createdAt)}</span>
-                      </div>
-                    </div>
-                    <Link href={`/posts/${post.id}`}>
-                      <Button variant="ghost" size="sm">
-                        Read More
-                      </Button>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+
+            {postsData.pagination.totalPages > 1 && (
+              <Pagination
+                currentPage={postsData.pagination.currentPage}
+                totalPages={postsData.pagination.totalPages}
+                onPageChange={handlePageChange}
+                hasNext={postsData.pagination.hasNext}
+                hasPrevious={postsData.pagination.hasPrevious}
+              />
+            )}
+          </>
         )}
       </div>
     </div>

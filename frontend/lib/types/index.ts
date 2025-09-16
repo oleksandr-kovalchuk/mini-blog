@@ -101,3 +101,27 @@ export interface ErrorProps {
   error: Error & { digest?: string };
   reset: () => void;
 }
+
+export interface PaginationParams {
+  page?: number;
+  limit?: number;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  pagination: {
+    currentPage: number;
+    totalPages: number;
+    totalCount: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+  };
+}
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  hasNext: boolean;
+  hasPrevious: boolean;
+}

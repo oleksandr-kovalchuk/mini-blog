@@ -9,6 +9,9 @@ import type {
   CreatePostData,
   UpdatePostData,
   UpdateUserData,
+  PaginationParams,
+  PaginatedResponse,
+  Post,
 } from '../types';
 
 function getToken(): string | null {
@@ -71,8 +74,17 @@ export async function login(data: LoginData): Promise<AuthResponse> {
   });
 }
 
-export async function getPosts() {
-  return makeRequest('/posts');
+export async function getPosts(
+  params?: PaginationParams
+): Promise<PaginatedResponse<Post>> {
+  const queryParams = new URLSearchParams();
+  if (params?.page) queryParams.append('page', params.page.toString());
+  if (params?.limit) queryParams.append('limit', params.limit.toString());
+
+  const endpoint = queryParams.toString()
+    ? `/posts?${queryParams.toString()}`
+    : '/posts';
+  return makeRequest<PaginatedResponse<Post>>(endpoint);
 }
 
 export async function getPost(id: string) {

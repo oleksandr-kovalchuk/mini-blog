@@ -5,8 +5,11 @@ import { AuthenticatedRequest } from '../middleware/auth';
 
 export const getPosts = async (req: Request, res: Response): Promise<void> => {
   try {
-    const posts = await getAllPosts();
-    res.json(posts);
+    const page = req.query.page ? parseInt(req.query.page as string) : 1;
+    const limit = req.query.limit ? parseInt(req.query.limit as string) : 5;
+
+    const result = await getAllPosts({ page, limit });
+    res.json(result);
   } catch (error) {
     res.status(500).json({ error: 'Internal server error' });
   }
