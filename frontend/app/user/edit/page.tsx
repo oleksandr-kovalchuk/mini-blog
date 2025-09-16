@@ -22,9 +22,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { Loader2, User, Save, ArrowLeft } from 'lucide-react';
+import { Loader2, User, Save, ArrowLeft, Trash2 } from 'lucide-react';
 import { useAuthStore } from '@/lib/auth/store';
-import { getCurrentUser, updateUser } from '@/lib/api';
+import { getCurrentUser, updateUser, deleteUser } from '@/lib/api';
 import type { UserResponse, UpdateUserResponse } from '@/lib/types';
 import { updateUserSchema } from '@/lib/validation/schemas';
 import type { UpdateUserFormData } from '@/lib/validation/form-types';
@@ -32,10 +32,12 @@ import type { UpdateUserFormData } from '@/lib/validation/form-types';
 export default function EditUserPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingUser, setIsLoadingUser] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
-  const { user, updateUser: updateAuthUser } = useAuthStore();
+  const { user, updateUser: updateAuthUser, logout } = useAuthStore();
 
   const form = useForm<UpdateUserFormData>({
     resolver: zodResolver(updateUserSchema),
@@ -107,6 +109,22 @@ export default function EditUserPage() {
       setError(err instanceof Error ? err.message : 'Failed to update profile');
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const handleDeleteProfile = async () => {
+    setIsDeleting(true);
+    setError(null);
+
+    try {
+      await deleteUser();
+      logout();
+      router.push('/');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete profile');
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteConfirm(false);
     }
   };
 
@@ -266,10 +284,81 @@ export default function EditUserPage() {
                     </>
                   )}
                 </Button>
+
+                <div className="border-t pt-4">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-3">Danger Zone</p>
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      onClick={() => setShowDeleteConfirm(true)}
+                      disabled={isLoading || isDeleting}
+                      className="w-full"
+                    >
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Account
+                    </Button>
+                  </div>
+                </div>
               </CardFooter>
             </form>
           </Form>
         </Card>
+
+        {/* Delete Confirmation Dialog */}
+        {showDeleteConfirm && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+              <div className="flex items-center mb-4">
+                <div className="flex-shrink-0">
+                  <Trash2 className="h-6 w-6 text-red-600" />
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-lg font-medium text-gray-900">
+                    Delete Account
+                  </h3>
+                </div>
+              </div>
+              <div className="mb-6">
+                <p className="text-sm text-gray-600">
+                  Are you sure you want to delete your account? This action
+                  cannot be undone. All your posts and data will be permanently
+                  removed.
+                </p>
+              </div>
+              <div className="flex space-x-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowDeleteConfirm(false)}
+                  disabled={isDeleting}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  type="button"
+                  variant="destructive"
+                  onClick={handleDeleteProfile}
+                  disabled={isDeleting}
+                  className="flex-1"
+                >
+                  {isDeleting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Deleting...
+                    </>
+                  ) : (
+                    <>
+                      <Trash2 className="mr-2 h-4 w-4" />
+                      Delete Account
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

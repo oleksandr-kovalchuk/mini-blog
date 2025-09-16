@@ -3,6 +3,7 @@ import type {
   AuthResponse,
   UserResponse,
   UpdateUserResponse,
+  DeleteUserResponse,
   RegisterData,
   LoginData,
   CreatePostData,
@@ -99,5 +100,11 @@ export async function updateUser(
   return makeRequest<UpdateUserResponse>('/users/me', {
     method: 'PUT',
     body: JSON.stringify(data),
+  });
+}
+
+export async function deleteUser(): Promise<DeleteUserResponse> {
+  return makeRequest<DeleteUserResponse>('/users/me', {
+    method: 'DELETE',
   });
 }

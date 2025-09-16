@@ -26,6 +26,10 @@ export interface UpdateUserResponse {
   };
 }
 
+export interface DeleteUserResponse {
+  message: string;
+}
+
 export interface AuthResponse {
   message: string;
   user: {
