@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuthStore } from '@/lib/auth/store';
 import { createPost } from '@/lib/api';
-import { ArrowLeft, Save, Loader2 } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Eye, Plus, List } from 'lucide-react';
 
 export default function NewPostPage() {
   const [title, setTitle] = useState('');
@@ -23,6 +23,7 @@ export default function NewPostPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [createdPostId, setCreatedPostId] = useState<string | null>(null);
   const router = useRouter();
   const { isAuthenticated, user, initialize } = useAuthStore();
 
@@ -50,11 +51,8 @@ export default function NewPostPage() {
         content: content.trim(),
       })) as { post: { id: string } };
 
+      setCreatedPostId(response.post.id);
       setSuccess(true);
-
-      setTimeout(() => {
-        router.push(`/posts/${response.post.id}`);
-      }, 3000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to create post');
     } finally {
@@ -99,9 +97,44 @@ export default function NewPostPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm text-green-700 mb-4">
-                Redirecting you to your new post...
-              </p>
+              <div className="space-y-4">
+                <p className="text-sm text-green-700">
+                  What would you like to do next?
+                </p>
+                <div className="flex flex-wrap gap-3">
+                  {createdPostId && (
+                    <Link href={`/posts/${createdPostId}`}>
+                      <Button className="bg-green-600 hover:bg-green-700">
+                        <Eye className="h-4 w-4 mr-2" />
+                        View Post
+                      </Button>
+                    </Link>
+                  )}
+                  <Link href="/posts">
+                    <Button
+                      variant="outline"
+                      className="border-green-300 text-green-700 hover:bg-green-100"
+                    >
+                      <List className="h-4 w-4 mr-2" />
+                      All Posts
+                    </Button>
+                  </Link>
+                  <Button
+                    variant="outline"
+                    className="border-green-300 text-green-700 hover:bg-green-100"
+                    onClick={() => {
+                      setSuccess(false);
+                      setCreatedPostId(null);
+                      setTitle('');
+                      setContent('');
+                      setError(null);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Create Another
+                  </Button>
+                </div>
+              </div>
             </CardContent>
           </Card>
         </div>
