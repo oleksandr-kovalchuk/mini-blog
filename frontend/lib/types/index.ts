@@ -125,3 +125,9 @@ export interface PaginationProps {
   hasNext: boolean;
   hasPrevious: boolean;
 }
+
+export interface DangerZoneProps {
+  onDeleteClick: () => void;
+  isLoading: boolean;
+  isDeleting: boolean;
+}
