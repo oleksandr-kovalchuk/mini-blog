@@ -131,3 +131,22 @@ export interface DangerZoneProps {
   isLoading: boolean;
   isDeleting: boolean;
 }
+
+export interface ErrorContextAction {
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  action: () => void;
+}
+
+export interface ErrorContext {
+  title: string;
+  description: string;
+  helpText: string;
+  contextAction: ErrorContextAction;
+}
+
+export interface LoadingContext {
+  icon: React.ComponentType<{ className?: string }>;
+  title: string;
+  message: string;
+}

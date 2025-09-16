@@ -10,15 +10,9 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import {
-  AlertTriangle,
-  RefreshCw,
-  Home,
-  ArrowLeft,
-  FileText,
-  LogIn,
-} from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home } from 'lucide-react';
 import type { ErrorProps } from '@/lib/types';
+import { getErrorContext } from '@/lib/utils';
 
 export default function Error({ error, reset }: ErrorProps) {
   const pathname = usePathname();
@@ -27,61 +21,8 @@ export default function Error({ error, reset }: ErrorProps) {
     console.error('Application error:', error);
   }, [error]);
 
-  const getErrorContext = () => {
-    if (pathname?.includes('/login') || pathname?.includes('/register')) {
-      return {
-        title: 'Authentication Error',
-        description: 'Something went wrong with the authentication process.',
-        helpText:
-          'Please try signing in again or contact support if the issue persists.',
-        contextAction: {
-          label: 'Back to Login',
-          icon: LogIn,
-          action: () => (window.location.href = '/login'),
-        },
-      };
-    }
-    if (pathname?.includes('/posts/')) {
-      return {
-        title: 'Failed to Load Post',
-        description:
-          "We couldn't load this post. It might be temporarily unavailable.",
-        helpText:
-          'This might be a temporary issue. Please try again in a moment.',
-        contextAction: {
-          label: 'All Posts',
-          icon: FileText,
-          action: () => (window.location.href = '/posts'),
-        },
-      };
-    }
-    if (pathname?.includes('/posts')) {
-      return {
-        title: 'Failed to Load Posts',
-        description: 'We encountered an error while loading the posts.',
-        helpText:
-          'This might be a temporary issue. Please try again in a moment.',
-        contextAction: {
-          label: 'Go Back',
-          icon: ArrowLeft,
-          action: () => window.history.back(),
-        },
-      };
-    }
-
-    return {
-      title: 'Something went wrong!',
-      description: 'An unexpected error occurred while loading this page.',
-      helpText: 'If this problem persists, please contact support.',
-      contextAction: {
-        label: 'Go Back',
-        icon: ArrowLeft,
-        action: () => window.history.back(),
-      },
-    };
-  };
-
-  const { title, description, helpText, contextAction } = getErrorContext();
+  const { title, description, helpText, contextAction } =
+    getErrorContext(pathname);
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center">
