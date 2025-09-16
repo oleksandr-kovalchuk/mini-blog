@@ -12,12 +12,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const { initialize } = useAuthStore();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      initialize();
-      setIsInitialized(true);
-    }, 100);
-
-    return () => clearTimeout(timer);
+    initialize();
+    setIsInitialized(true);
   }, [initialize]);
 
   if (!isInitialized) {
